@@ -116,6 +116,36 @@ The export menu keeps the existing raster PPTX option and adds a separate editab
 
 The built-in demo source is `doc/L9.md`. This is a repository-relative path, so a fresh clone can use it directly in the WebUI or CLI examples.
 
+## Agent Skills
+
+AIPPT includes ready-to-use Agent Skills for running presentation generation directly from an AI coding agent without deploying the WebUI.
+
+| Format | Directory | Intended use |
+| --- | --- | --- |
+| Universal Agent Skill | `skills/universal/aippt/` | Agent Skills-compatible tools |
+| Claude Code | `skills/claude-code/aippt/` | Project or personal Claude Code skills |
+| Codex | `skills/codex/aippt/` | Project or personal Codex skills |
+
+Install the format used by your agent:
+
+```bash
+# Claude Code, project-local
+mkdir -p .claude/skills
+cp -R skills/claude-code/aippt .claude/skills/aippt
+
+# Codex, project-local
+mkdir -p .agents/skills
+cp -R skills/codex/aippt .agents/skills/aippt
+
+# Codex, personal alternative
+mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
+cp -R skills/codex/aippt "${CODEX_HOME:-$HOME/.codex}/skills/aippt"
+```
+
+Then ask the agent to generate a deck from a repository-local Markdown or text file, for example: `Use AIPPT to turn doc/L9.md into an 8-slide Chinese presentation.`
+
+The skills use the existing `main.py` workflow, validate generated artifacts, and require credentials to remain in the ignored local `config.yaml`. They never require an API key in the prompt or command line.
+
 ## 📁 Project Structure
 
 ```
@@ -123,6 +153,7 @@ OpenNotebookLM-AIPPT/
 ├── src/                    # Core logic
 ├── api/                    # FastAPI backend
 ├── web/                    # React frontend
+├── skills/                 # Universal, Claude Code, and Codex Agent Skills
 ├── tests/                  # Tests
 ├── doc/                    # Input documents directory
 │   └── L9.md               # Default demo source

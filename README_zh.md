@@ -116,6 +116,36 @@ AIPPT 会把项目内容和图片资源保存在当前浏览器 Profile 的 Inde
 
 仓库内置演示资料为 `doc/L9.md`。该路径是仓库相对路径，clone 后可直接用于 WebUI 上传或命令行示例。
 
+## Agent Skill 使用
+
+AIPPT 提供三种可直接使用的 Agent Skill。无需部署 WebUI，即可让 AI 编程 Agent 调用现有命令行流程生成并检查演示文稿。
+
+| 格式 | 目录 | 适用场景 |
+| --- | --- | --- |
+| 通用 Agent Skill | `skills/universal/aippt/` | 兼容 Agent Skills 规范的工具 |
+| Claude Code | `skills/claude-code/aippt/` | Claude Code 项目级或个人 Skill |
+| Codex | `skills/codex/aippt/` | Codex 项目级或个人 Skill |
+
+按所用 Agent 安装对应版本：
+
+```bash
+# Claude Code：当前项目
+mkdir -p .claude/skills
+cp -R skills/claude-code/aippt .claude/skills/aippt
+
+# Codex：当前项目
+mkdir -p .agents/skills
+cp -R skills/codex/aippt .agents/skills/aippt
+
+# Codex：个人目录（可选）
+mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
+cp -R skills/codex/aippt "${CODEX_HOME:-$HOME/.codex}/skills/aippt"
+```
+
+安装后可直接告诉 Agent：`使用 AIPPT 把 doc/L9.md 生成一份 8 页中文演示文稿。`
+
+这些 Skill 会调用现有 `main.py` 流程，并在完成后检查输出文件。模型密钥只允许保存在已被 Git 忽略的本地 `config.yaml` 中，不需要也不应写入提示词或命令行。
+
 ## 📁 项目结构
 
 ```
@@ -123,6 +153,7 @@ OpenNotebookLM-AIPPT/
 ├── src/                    # 核心逻辑
 ├── api/                    # FastAPI 后端
 ├── web/                    # React 前端
+├── skills/                 # 通用、Claude Code 与 Codex Agent Skill
 ├── tests/                  # 测试
 ├── doc/                    # 输入文档目录
 │   └── L9.md               # 默认演示资料
